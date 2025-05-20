@@ -1,6 +1,7 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import Header from './components/Header';
 
 function FragmentsPage({ tags }) {
   // Liste dynamique de fragments (exemple)
@@ -78,13 +79,19 @@ function FragmentsPage({ tags }) {
     <div style={{ padding: '20px' }}>
       <h2>Code Snippets</h2>
       {/* Formulaire d'ajout/modification */}
-      <form onSubmit={addOrEditFragment} style={{ marginBottom: '20px', background: '#f9f9f9', padding: '15px', borderRadius: '8px' }}>
+      <form onSubmit={addOrEditFragment} style={{
+        marginBottom: '20px',
+        background: '#ffffff',
+        padding: '15px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+      }}>
         <input
           type="text"
           placeholder="Snippet title"
           value={title}
           onChange={e => setTitle(e.target.value)}
-          style={{ marginRight: '10px', padding: '5px' }}
+          style={{ marginRight: '10px', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
           required
         />
         <input
@@ -92,12 +99,12 @@ function FragmentsPage({ tags }) {
           placeholder="Snippet code"
           value={code}
           onChange={e => setCode(e.target.value)}
-          style={{ marginRight: '10px', padding: '5px', width: '300px' }}
+          style={{ marginRight: '10px', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', width: '300px' }}
           required
         />
         {/* Sélection des tags */}
         <div style={{ margin: '10px 0' }}>
-          <span style={{ marginRight: '10px' }}>Tags:</span>
+          <span style={{ marginRight: '10px', fontWeight: 'bold' }}>Tags:</span>
           {tags.length === 0 && <span style={{ color: '#888' }}>No tags available</span>}
           {tags.map(tag => (
             <label key={tag.id} style={{ marginRight: '10px' }}>
@@ -109,11 +116,27 @@ function FragmentsPage({ tags }) {
             </label>
           ))}
         </div>
-        <button type="submit" style={{ background: '#3333b2', color: 'white', border: 'none', borderRadius: '4px', padding: '5px 15px', cursor: 'pointer' }}>
+        <button type="submit" style={{
+          background: '#3333b2',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          padding: '8px 15px',
+          cursor: 'pointer',
+          marginRight: '10px'
+        }}>
           {editId ? 'Update' : 'Add'}
         </button>
         {editId && (
-          <button type="button" onClick={cancelEdit} style={{ marginLeft: '10px', background: '#aaa', color: 'white', border: 'none', borderRadius: '4px', padding: '5px 15px', cursor: 'pointer' }}>
+          <button type="button" onClick={cancelEdit} style={{
+            marginLeft: '0',
+            background: '#aaa',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '8px 15px',
+            cursor: 'pointer'
+          }}>
             Cancel
           </button>
         )}
@@ -121,16 +144,23 @@ function FragmentsPage({ tags }) {
       {fragments.length === 0 && <p>No code snippets yet.</p>}
       <ul style={{ listStyle: 'none', padding: 0 }}>
         {fragments.map(frag => (
-          <li key={frag.id} style={{ marginBottom: '20px', border: '1px solid #b288c0', borderRadius: '8px', padding: '10px' }}>
-            <strong>{frag.title}</strong>
-            <pre style={{ background: '#f4f4f4', padding: '10px', borderRadius: '5px', overflowX: 'auto' }}>{frag.code}</pre>
+          <li key={frag.id} style={{ marginBottom: '20px', border: '1px solid #b288c0', borderRadius: '8px', padding: '15px', background: '#ffffff', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+            <strong style={{ fontSize: '1.2em', display: 'block', marginBottom: '5px' }}>{frag.title}</strong>
+            <pre style={{ background: '#f4f4f4', padding: '10px', borderRadius: '5px', overflowX: 'auto', marginBottom: '10px' }}>{frag.code}</pre>
             {/* Affichage des tags associés */}
             <div style={{ margin: '5px 0' }}>
               {frag.tags && frag.tags.length > 0 && (
                 frag.tags.map(tagId => {
                   const tag = tags.find(t => t.id === tagId);
                   return tag ? (
-                    <span key={tagId} style={{ background: '#b288c0', color: 'white', borderRadius: '5px', padding: '2px 8px', marginRight: '5px', fontSize: '0.9em' }}>{tag.name}</span>
+                    <span key={tagId} style={{
+                      background: '#9a48d0',
+                      color: 'white',
+                      borderRadius: '5px',
+                      padding: '2px 8px',
+                      marginRight: '5px',
+                      fontSize: '0.9em'
+                    }}>{tag.name}</span>
                   ) : null;
                 })
               )}
@@ -168,16 +198,22 @@ function TagsPage({ tags, setTags }) {
     <div style={{ padding: '20px' }}>
       <h2>Tags</h2>
       {/* Formulaire d'ajout de tag */}
-      <form onSubmit={addTag} style={{ marginBottom: '20px', background: '#f9f9f9', padding: '15px', borderRadius: '8px' }}>
+      <form onSubmit={addTag} style={{
+        marginBottom: '20px',
+        background: '#ffffff',
+        padding: '15px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+      }}>
         <input
           type="text"
           placeholder="Tag name"
           value={tagName}
           onChange={e => setTagName(e.target.value)}
-          style={{ marginRight: '10px', padding: '5px' }}
+          style={{ marginRight: '10px', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
           required
         />
-        <button type="submit" style={{ background: '#3333b2', color: 'white', border: 'none', borderRadius: '4px', padding: '5px 15px', cursor: 'pointer' }}>Add</button>
+        <button type="submit" style={{ background: '#3333b2', color: 'white', border: 'none', borderRadius: '4px', padding: '8px 15px', cursor: 'pointer' }}>Add</button>
       </form>
       {tags.length === 0 && <p>No tags yet.</p>}
       <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexWrap: 'wrap' }}>
@@ -198,7 +234,7 @@ TagsPage.propTypes = {
 
 function InfoPage() {
   return (
-    <div style={{ padding: '20px', maxWidth: '700px', margin: '0 auto', background: '#fff', color: '#222' }}>
+    <div style={{ padding: '20px', maxWidth: '700px', margin: '0 auto', background: '#ffffff', color: '#222', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
       <h2>Information</h2>
       <h3>App features</h3>
       <ul>
@@ -219,7 +255,6 @@ function InfoPage() {
 }
 
 function App() {
-  // Les tags sont partagés entre FragmentsPage et TagsPage
   const [tags, setTags] = useState([
     { id: 1, name: 'React' },
     { id: 2, name: 'State' },
@@ -229,11 +264,7 @@ function App() {
   return (
     <div style={{ minHeight: '100vh', background: '#f5f5f5', color: '#222' }}>
       <Router>
-        <nav style={{ background: '#b288c0', padding: '10px', display: 'flex', alignItems: 'center' }}>
-          <Link to="/fragments" style={{ marginRight: '10px', color: 'white', textDecoration: 'none' }}>Snippets</Link>
-          <Link to="/tags" style={{ marginRight: '10px', color: 'white', textDecoration: 'none' }}>Tags</Link>
-          <Link to="/info" style={{ color: 'white', textDecoration: 'none', marginRight: 'auto' }}>Info</Link>
-        </nav>
+        <Header />
         <Routes>
           <Route path="/fragments" element={<FragmentsPage tags={tags} />} />
           <Route path="/tags" element={<TagsPage tags={tags} setTags={setTags} />} />
