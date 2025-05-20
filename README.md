@@ -1,34 +1,17 @@
-# app-code-wallet
+# Code Wallet
 
-An Electron application with React
+A simple desktop app to organize and manage your code snippets, built with React and Electron.
 
-## Recommended IDE Setup
+## Features
+- Add, edit, delete code snippets
+- Associate tags to each snippet
+- Add and delete tags
+- Easy navigation between Snippets, Tags and Info
+- Modern and minimal interface
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+## How to run
+1. Install dependencies: `npm install`
+2. Start the app: `npm run dev`
 
-## Project Setup
-
-### Install
-
-```bash
-$ npm install
-```
-
-### Development
-
-```bash
-$ npm run dev
-```
-
-### Build
-
-```bash
-# For windows
-$ npm run build:win
-
-# For macOS
-$ npm run build:mac
-
-# For Linux
-$ npm run build:linux
-```
+## Author
+Essidy Osra
