@@ -1,20 +1,40 @@
-import { contextBridge } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
+const { contextBridge, ipcRenderer } = require('electron');
+const { store, saveData, loadData, deleteData } = require('../main/store');
 
-// Custom APIs for renderer
-const api = {}
-
-// Use `contextBridge` APIs to expose Electron APIs to
-// renderer only if context isolation is enabled, otherwise
-// just add to the DOM global.
-if (process.contextIsolated) {
-  try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
-    contextBridge.exposeInMainWorld('api', api)
-  } catch (error) {
-    console.error(error)
+// Expose protected methods that allow the renderer process to use
+// the ipcRenderer without exposing the entire object
+contextBridge.exposeInMainWorld('electron', {
+  store: {
+    get: (key) => {
+      try {
+        return loadData(key);
+      } catch (error) {
+        console.error('Erreur de lecture:', error);
+        // Tentative de restauration depuis la sauvegarde
+        const backup = loadData(`backup_${key}`);
+        if (backup) {
+          saveData(key, backup);
+          return backup;
+        }
+        return null;
+      }
+    },
+    set: (key, value) => {
+      try {
+        return saveData(key, value);
+      } catch (error) {
+        console.error('Erreur de sauvegarde:', error);
+        // Sauvegarde de secours
+        return saveData(`backup_${key}`, value);
+      }
+    },
+    delete: (key) => {
+      try {
+        return deleteData(key);
+      } catch (error) {
+        console.error('Erreur de suppression:', error);
+        return false;
+      }
+    }
   }
-} else {
-  window.electron = electronAPI
-  window.api = api
-}
+});

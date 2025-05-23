@@ -1,7 +1,20 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+const { app, shell, BrowserWindow, ipcMain } = require('electron')
+const { join } = require('path')
+const { electronApp, optimizer, is } = require('@electron-toolkit/utils')
+const icon = require('../../resources/icon.png?asset')
+const { store, saveData, loadData } = require('./store')
+
+// Gestion des erreurs non capturées
+process.on('uncaughtException', (error) => {
+  console.error('Erreur non capturée:', error);
+  // Sauvegarde de sécurité des données
+  if (store) {
+    const fragments = store.get('fragments', []);
+    const tags = store.get('tags', []);
+    saveData('backup_fragments', fragments);
+    saveData('backup_tags', tags);
+  }
+});
 
 function createWindow() {
   // Create the browser window.
@@ -13,9 +26,34 @@ function createWindow() {
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      contextIsolation: true,
+      nodeIntegration: true
     }
-  })
+  });
+
+  // Chargement initial des données
+  mainWindow.webContents.on('did-finish-load', () => {
+    const fragments = loadData('fragments') || [];
+    const tags = loadData('tags') || [];
+    const darkMode = loadData('darkMode') || false;
+    
+    mainWindow.webContents.send('store-data', { fragments, tags, darkMode });
+  });
+
+  // Sauvegarde périodique
+  const autoSaveInterval = setInterval(() => {
+    if (store) {
+      const fragments = store.get('fragments', []);
+      const tags = store.get('tags', []);
+      saveData('auto_backup_fragments', fragments);
+      saveData('auto_backup_tags', tags);
+    }
+  }, 5 * 60 * 1000); // Toutes les 5 minutes
+
+  mainWindow.on('closed', () => {
+    clearInterval(autoSaveInterval);
+  });
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
@@ -25,6 +63,15 @@ function createWindow() {
     shell.openExternal(details.url)
     return { action: 'deny' }
   })
+
+  // Expose store to renderer process
+  mainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.send('store-ready', {
+      fragments: store.get('fragments'),
+      tags: store.get('tags'),
+      darkMode: store.get('darkMode')
+    });
+  });
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
