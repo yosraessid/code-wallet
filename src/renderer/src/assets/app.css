@@ -1,0 +1,107 @@
+/* Global styles */
+body {
+  margin: 0;
+  font-family: 'Montserrat', Arial, sans-serif;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #333;
+  color: white;
+ 
+}
+
+nav {
+  display: flex;
+  align-items: center;
+}
+
+nav a, nav button {
+  color: white;
+  text-decoration: none;
+  margin-left: 15px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+
+.logo {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+/* Titres principaux en semi-bold et taille adaptée */
+h2, .main-title, .section-title {
+  font-size: 2.1em;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  margin-bottom: 0.7em;
+ 
+}
+
+/* Titres secondaires (ex: Mots clés, Informations) */
+h3, .subtitle, .info-title, .keywords-title {
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+/* Pour le bouton Mode Sombre si besoin */
+.mode-dark-btn {
+  font-weight: 600;
+  font-size: 1.05em;
+  
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+  nav {
+    padding: 15px 10px !important;
+  }
+  nav a, nav button {
+    font-size: 1.05em;
+    padding: 10px 10px;
+  }
+}
+
+@media (max-width: 900px) {
+  nav {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 15px 10px !important;
+  }
+  nav > div {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    width: 100%;
+  }
+  nav a, nav button {
+    margin-left: 0 !important;
+    margin-top: 10px !important;
+    width: 100%;
+    text-align: left;
+    font-size: 1em;
+  }
+  .logo {
+    font-size: 1.2em !important;
+  }
+}
+
+@media (max-width: 600px) {
+  nav {
+    padding: 10px 5px !important;
+  }
+  nav a, nav button {
+    font-size: 0.95em !important;
+    padding: 8px 5px !important;
+  }
+  .logo {
+    font-size: 1em !important;
+  }
+}
